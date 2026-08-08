@@ -20,6 +20,13 @@ function Media({ media }) {
   if (media.kind === 'number') {
     return <div className="q-number">{media.value}</div>
   }
+  if (media.kind === 'flag') {
+    return (
+      <div className="q-flag" role="img" aria-label={t('quiz.countryFlag', resolveVars(t, media))}>
+        {media.value}
+      </div>
+    )
+  }
   if (media.kind === 'logo') {
     return (
       <img className="q-logo" src={media.src} alt={t('quiz.teamLogo', { team: media.team })} />
@@ -237,6 +244,11 @@ export default function Quiz() {
               >
                 {q.optionPhotos?.[option] && (
                   <img className="option-photo" src={q.optionPhotos[option]} alt="" loading="lazy" />
+                )}
+                {q.optionFlags?.[option] && (
+                  <span className="option-flag" aria-hidden="true">
+                    {q.optionFlags[option]}
+                  </span>
                 )}
                 {tOption(t, option, q.optionKind)}
                 {answered && isCorrect && <span className="option-mark">✅</span>}

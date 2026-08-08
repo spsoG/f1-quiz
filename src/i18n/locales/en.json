@@ -75,6 +75,7 @@
     "score": "Score <b>{{score}}</b>",
     "mysteryDriver": "Mystery driver",
     "teamLogo": "{{team}} logo",
+    "countryFlag": "Flag of {{country}}",
     "youSaid": "you said {{choice}}",
 
     "topics": {

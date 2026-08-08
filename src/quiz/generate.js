@@ -32,17 +32,19 @@ const year = SEASON.year
 /**
  * Every builder returns a question:
  *   { promptKey, promptVars, reviewKey, media, options, correct, optionKind,
- *     optionPhotos, explainKey, explainVars, subject }
+ *     optionPhotos, optionFlags, explainKey, explainVars, subject }
  *
  * Text is stored as translation keys plus variables and is resolved at render
  * time, so switching language mid-quiz relabels a question in place. `options`
  * and `correct` hold the canonical English data values — grading is a plain
  * string comparison and never depends on the active language; `optionKind`
  * tells the renderer which of them have translations of their own, and the
- * optional `optionPhotos` maps an option to a headshot to show beside it.
+ * optional `optionPhotos` / `optionFlags` map an option to a headshot or a flag
+ * to show beside it.
  *
- * `media` is rendered above the prompt — a photo, a blurred photo, a car number
- * or a team logo. It only ever shows something the question isn't asking for.
+ * `media` is rendered above the prompt — a photo, a blurred photo, a car number,
+ * a team logo or a flag. It only ever shows something the question isn't asking
+ * for.
  * `reviewKey` replaces the prompt on the results screen, where the media is gone
  * and "this driver" / "this number" no longer means anything.
  */
@@ -173,19 +175,27 @@ const BUILDERS = {
   ],
 
   countries: [
-    (driver) => ({
-      promptKey: 'quiz.prompts.countryOf',
-      promptVars: { name: driver.name },
-      optionKind: 'country',
-      correct: driver.country,
-      options: distractors(DRIVERS, 3, (d) => d.country, [driver.country]).map((d) => d.country),
-      subject: driver,
-      explainKey: 'quiz.explain.flagOf',
-      explainVars: { name: driver.name, country: driver.country, flag: driver.flag },
-    }),
+    // No flag above the prompt here — this driver's flag is the answer. It goes
+    // beside the options instead, where all four are shown and none is a tell.
+    (driver) => {
+      const others = distractors(DRIVERS, 3, (d) => d.country, [driver.country])
+      return {
+        promptKey: 'quiz.prompts.countryOf',
+        promptVars: { name: driver.name },
+        optionKind: 'country',
+        correct: driver.country,
+        options: others.map((d) => d.country),
+        optionFlags: Object.fromEntries([driver, ...others].map((d) => [d.country, d.flag])),
+        subject: driver,
+        explainKey: 'quiz.explain.flagOf',
+        explainVars: { name: driver.name, country: driver.country, flag: driver.flag },
+      }
+    },
     (driver) => ({
       promptKey: 'quiz.prompts.driverOfCountry',
       promptVars: { country: driver.country },
+      // The prompt already names the country, so the flag only restates it.
+      media: { kind: 'flag', value: driver.flag, country: driver.country },
       optionKind: 'driver',
       correct: driver.name,
       options: distractors(

@@ -4,7 +4,7 @@ A React app for browsing the 2026 Formula 1 grid and testing yourself on it.
 
 - **Drivers** — every driver on the grid as a card with their official headshot, name, team, car number and points. Search by name, team, country, three-letter code or number; filter by team; sort by championship position, number, surname or team. Clicking a card opens a detail panel with championship position, points, wins, podiums, team base, date of birth, age and a jump link to their team mate.
 - **Standings** — the drivers' and constructors' championships, both computed from real race results.
-- **Quiz** — multiple-choice rounds drawn from the driver data. Pick a topic (mixed, photos, teams, numbers, nationalities) and a length (5, 10 or all 22), answer, and get instant grading plus a full review at the end. Questions show the team logo whenever the team isn't itself the answer, and answer options are illustrated — headshots beside driver names in the "who runs this number?" round.
+- **Quiz** — multiple-choice rounds drawn from the driver data. Pick a topic (mixed, photos, teams, numbers, nationalities) and a length (5, 10 or all 22), answer, and get instant grading plus a full review at the end. Questions are illustrated wherever the picture isn't the answer: the team logo above team questions, a flag above "who's from this country?", headshots beside driver names in the "who runs this number?" round, and flags beside the country options.
 - **English and Ukrainian**, switchable from the header at any time — including mid-quiz.
 
 ## Running it
