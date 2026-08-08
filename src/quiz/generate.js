@@ -32,13 +32,14 @@ const year = SEASON.year
 /**
  * Every builder returns a question:
  *   { promptKey, promptVars, reviewKey, media, options, correct, optionKind,
- *     explainKey, explainVars, subject }
+ *     optionPhotos, explainKey, explainVars, subject }
  *
  * Text is stored as translation keys plus variables and is resolved at render
  * time, so switching language mid-quiz relabels a question in place. `options`
  * and `correct` hold the canonical English data values — grading is a plain
  * string comparison and never depends on the active language; `optionKind`
- * tells the renderer which of them have translations of their own.
+ * tells the renderer which of them have translations of their own, and the
+ * optional `optionPhotos` maps an option to a headshot to show beside it.
  *
  * `media` is rendered above the prompt — a photo, a blurred photo, a car number
  * or a team logo. It only ever shows something the question isn't asking for.
@@ -150,19 +151,25 @@ const BUILDERS = {
       explainKey: 'quiz.explain.runsNumber',
       explainVars: { name: driver.name, number: driver.number, team: driver.team },
     }),
-    (driver) => ({
-      promptKey: 'quiz.prompts.driverOfNumber',
-      promptVars: { number: driver.number },
-      reviewKey: 'quiz.review.driverOfNumber',
-      // Deliberately not tinted with the team colour — that would give the answer away.
-      media: { kind: 'number', value: driver.number },
-      optionKind: 'driver',
-      correct: driver.name,
-      options: distractors(DRIVERS, 3, (d) => d.name, [driver.name]).map((d) => d.name),
-      subject: driver,
-      explainKey: 'quiz.explain.numberBelongs',
-      explainVars: { number: driver.number, name: driver.name, team: driver.team },
-    }),
+    (driver) => {
+      const others = distractors(DRIVERS, 3, (d) => d.name, [driver.name])
+      return {
+        promptKey: 'quiz.prompts.driverOfNumber',
+        promptVars: { number: driver.number },
+        reviewKey: 'quiz.review.driverOfNumber',
+        // Deliberately not tinted with the team colour — that would give the answer away.
+        media: { kind: 'number', value: driver.number },
+        optionKind: 'driver',
+        correct: driver.name,
+        options: others.map((d) => d.name),
+        // A headshot can't hint at a car number, so it's safe to show here —
+        // unlike the photo round, where it would be the answer.
+        optionPhotos: Object.fromEntries([driver, ...others].map((d) => [d.name, d.photo])),
+        subject: driver,
+        explainKey: 'quiz.explain.numberBelongs',
+        explainVars: { number: driver.number, name: driver.name, team: driver.team },
+      }
+    },
   ],
 
   countries: [

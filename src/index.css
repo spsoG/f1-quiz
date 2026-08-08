@@ -733,6 +733,18 @@ img {
   opacity: 0.42;
 }
 
+/* The option row is already a flex line, so the headshot just sits in front. */
+.option-photo {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  margin: -4px 0;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  background: var(--bg-raised);
+}
+
 .option-mark {
   margin-left: auto;
   font-size: 17px;

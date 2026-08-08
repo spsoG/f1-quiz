@@ -235,6 +235,9 @@ export default function Quiz() {
                 disabled={answered}
                 onClick={() => answer(option)}
               >
+                {q.optionPhotos?.[option] && (
+                  <img className="option-photo" src={q.optionPhotos[option]} alt="" loading="lazy" />
+                )}
                 {tOption(t, option, q.optionKind)}
                 {answered && isCorrect && <span className="option-mark">✅</span>}
                 {answered && isChoice && !isCorrect && <span className="option-mark">❌</span>}
