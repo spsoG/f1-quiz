@@ -40,9 +40,10 @@ const year = SEASON.year
  * string comparison and never depends on the active language; `optionKind`
  * tells the renderer which of them have translations of their own.
  *
- * `media` is rendered above the prompt — a photo, a blurred photo or a car
- * number. `reviewKey` replaces the prompt on the results screen, where the
- * media is gone and "this driver" / "this number" no longer means anything.
+ * `media` is rendered above the prompt — a photo, a blurred photo, a car number
+ * or a team logo. It only ever shows something the question isn't asking for.
+ * `reviewKey` replaces the prompt on the results screen, where the media is gone
+ * and "this driver" / "this number" no longer means anything.
  */
 const BUILDERS = {
   photo: [
@@ -85,6 +86,7 @@ const BUILDERS = {
   ],
 
   teams: [
+    // No logo on this one — the team is the answer, so showing it would give it away.
     (driver) => ({
       promptKey: 'quiz.prompts.teamOf',
       promptVars: { name: driver.name, year },
@@ -101,6 +103,7 @@ const BUILDERS = {
       return {
         promptKey: 'quiz.prompts.teamMate',
         promptVars: { name: driver.name, team: driver.team },
+        media: { kind: 'logo', src: driver.teamLogo, team: driver.team },
         optionKind: 'driver',
         correct: mate.name,
         options: distractors(
@@ -117,6 +120,7 @@ const BUILDERS = {
     (driver) => ({
       promptKey: 'quiz.prompts.driverOfTeam',
       promptVars: { team: driver.team },
+      media: { kind: 'logo', src: driver.teamLogo, team: driver.team },
       optionKind: 'driver',
       correct: driver.name,
       options: distractors(

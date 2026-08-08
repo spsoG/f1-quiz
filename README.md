@@ -4,7 +4,7 @@ A React app for browsing the 2026 Formula 1 grid and testing yourself on it.
 
 - **Drivers** — every driver on the grid as a card with their official headshot, name, team, car number and points. Search by name, team, country, three-letter code or number; filter by team; sort by championship position, number, surname or team. Clicking a card opens a detail panel with championship position, points, wins, podiums, team base, date of birth, age and a jump link to their team mate.
 - **Standings** — the drivers' and constructors' championships, both computed from real race results.
-- **Quiz** — multiple-choice rounds drawn from the driver data. Pick a topic (mixed, photos, teams, numbers, nationalities) and a length (5, 10 or all 22), answer, and get instant grading plus a full review at the end.
+- **Quiz** — multiple-choice rounds drawn from the driver data. Pick a topic (mixed, photos, teams, numbers, nationalities) and a length (5, 10 or all 22), answer, and get instant grading plus a full review at the end. Questions show the team logo whenever the team isn't itself the answer.
 - **English and Ukrainian**, switchable from the header at any time — including mid-quiz.
 
 ## Running it
@@ -21,8 +21,15 @@ npm run lint
 `src/data/drivers.js` is generated from the [OpenF1 API](https://openf1.org). The
 line-up, car numbers, team colours and headshot URLs come from the most recent
 race session; championship points, wins and podiums are computed by summing every
-race and sprint result of the season. Headshots are the official Formula 1 media
-images, downloaded into `public/drivers/` so the app needs no network at runtime.
+race and sprint result of the season. Headshots and team logos are the official
+Formula 1 media images, downloaded into `public/drivers/` and `public/teams/` so
+the app needs no network at runtime.
+
+Logos are the white-on-transparent variant, which is what suits the dark UI —
+each team's slug lives in `TEAM_SLUG` in the refresh script, and every driver
+carries a `teamLogo` path alongside their `teamColour` and `teamBase`. If F1
+hasn't published a logo for a season yet, the refresh warns and keeps the file
+already on disk rather than failing the run.
 
 The data currently in the repo is from after the 2026 Hungarian Grand Prix
 (26 July 2026) — 22 drivers across 11 teams, 11 rounds completed.
@@ -90,7 +97,8 @@ language mid-question relabels it in place.
 
 ```
 public/drivers/         official headshots, one PNG per driver
-scripts/refresh-data.mjs  regenerates the dataset and headshots from OpenF1
+public/teams/           official team logos, one PNG per team
+scripts/refresh-data.mjs  regenerates the dataset, headshots and logos
 src/data/drivers.js     generated: SEASON, DRIVERS, TEAMS
 src/i18n/               i18next setup, locale files and data-value helpers
 src/quiz/generate.js    question builders and quiz assembly

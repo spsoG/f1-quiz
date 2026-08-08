@@ -74,6 +74,7 @@
     "progress": "Question <b>{{current}}</b> of {{total}}",
     "score": "Score <b>{{score}}</b>",
     "mysteryDriver": "Mystery driver",
+    "teamLogo": "{{team}} logo",
     "youSaid": "you said {{choice}}",
 
     "topics": {

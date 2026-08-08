@@ -20,6 +20,11 @@ function Media({ media }) {
   if (media.kind === 'number') {
     return <div className="q-number">{media.value}</div>
   }
+  if (media.kind === 'logo') {
+    return (
+      <img className="q-logo" src={media.src} alt={t('quiz.teamLogo', { team: media.team })} />
+    )
+  }
   return (
     <img
       className={`q-photo${media.blurred ? ' blurred' : ''}`}

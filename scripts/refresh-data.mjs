@@ -1,13 +1,14 @@
 /**
- * Rebuilds src/data/drivers.js and public/drivers/*.png from the OpenF1 API.
+ * Rebuilds src/data/drivers.js, public/drivers/*.png and public/teams/*.png from
+ * the OpenF1 API and the Formula 1 media library.
  *
  *   node scripts/refresh-data.mjs [year]
  *
  * Driver bios, nationalities and dates of birth are hand-written and are carried
  * over from the existing data file by driver code, so re-running this only
  * refreshes the things that actually change during a season: the line-up, car
- * numbers, team colours, headshots and championship points. A driver who is new
- * to the grid comes through with empty bio fields for you to fill in.
+ * numbers, team colours, headshots, team logos and championship points. A driver
+ * who is new to the grid comes through with empty bio fields for you to fill in.
  */
 
 import { mkdir, writeFile } from 'node:fs/promises'
@@ -50,6 +51,27 @@ const TEAM_BASE = {
   Audi: 'Hinwil, Switzerland',
   Cadillac: 'Silverstone, United Kingdom',
 }
+
+/**
+ * Slugs F1 uses for team logos in its media library. The white-on-transparent
+ * variant is the one that suits the app's dark UI.
+ */
+const TEAM_SLUG = {
+  Alpine: 'alpine',
+  'Aston Martin': 'astonmartin',
+  Audi: 'audi',
+  Cadillac: 'cadillac',
+  Ferrari: 'ferrari',
+  'Haas F1 Team': 'haasf1team',
+  McLaren: 'mclaren',
+  Mercedes: 'mercedes',
+  'Racing Bulls': 'racingbulls',
+  'Red Bull Racing': 'redbullracing',
+  Williams: 'williams',
+}
+
+const logoUrl = (slug, year) =>
+  `https://media.formula1.com/image/upload/c_fit,w_320,h_320/q_auto,f_png/common/f1/${year}/${slug}/${year}${slug}logowhite.webp`
 
 const titleCase = (s) => s.charAt(0).toUpperCase() + s.slice(1).toLowerCase()
 
@@ -106,6 +128,7 @@ async function main() {
         team: d.team_name,
         teamColour: `#${d.team_colour}`,
         teamBase: TEAM_BASE[d.team_name] ?? old.teamBase ?? '',
+        teamLogo: TEAM_SLUG[d.team_name] ? `/teams/${TEAM_SLUG[d.team_name]}.png` : old.teamLogo ?? '',
         country: old.country ?? '',
         flag: old.flag ?? '',
         dob: old.dob ?? null,
@@ -138,6 +161,25 @@ async function main() {
     console.log(`  ${d.code} ${Math.round(buf.length / 1024)}KB${d.hasPhoto ? '' : '  (placeholder)'}`)
   }
 
+  console.log('\nDownloading team logos…')
+  await mkdir(join(ROOT, 'public/teams'), { recursive: true })
+  for (const team of [...new Set(drivers.map((d) => d.team))]) {
+    const slug = TEAM_SLUG[team]
+    if (!slug) {
+      console.log(`  ⚠️  ${team} — no logo slug, add one to TEAM_SLUG`)
+      continue
+    }
+    // A missing logo shouldn't sink a refresh — the old file stays in place.
+    const res = await fetch(logoUrl(slug, YEAR))
+    if (!res.ok) {
+      console.log(`  ⚠️  ${team} — ${res.status} for ${slug}, keeping the existing file`)
+      continue
+    }
+    const buf = Buffer.from(await res.arrayBuffer())
+    await writeFile(join(ROOT, 'public/teams', `${slug}.png`), buf)
+    console.log(`  ${team} → ${slug}.png ${Math.round(buf.length / 1024)}KB`)
+  }
+
   const missing = drivers.filter((d) => !d.country || !d.dob || !d.bio)
   if (missing.length) {
     console.log(`\n⚠️  Fill in country / flag / dob / bio for: ${missing.map((d) => d.code).join(', ')}`)
@@ -166,6 +208,7 @@ export const TEAMS = [...new Set(DRIVERS.map((d) => d.team))].map((team) => {
     name: team,
     colour: drivers[0].teamColour,
     base: drivers[0].teamBase,
+    logo: drivers[0].teamLogo,
     drivers,
     points: drivers.reduce((sum, d) => sum + d.points, 0),
   };

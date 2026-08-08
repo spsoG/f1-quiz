@@ -76,6 +76,7 @@
     "progress": "Питання <b>{{current}}</b> з {{total}}",
     "score": "Рахунок <b>{{score}}</b>",
     "mysteryDriver": "Загадковий пілот",
+    "teamLogo": "Логотип {{team}}",
     "youSaid": "ваша відповідь — {{choice}}",
 
     "topics": {
