@@ -1,0 +1,154 @@
+{
+  "app": {
+    "title": "The {{year}} Grid",
+    "subtitle_one": "After {{count}} round — latest: {{country}} GP, {{date}}",
+    "subtitle_other": "After {{count}} rounds — latest: {{country}} GP, {{date}}",
+    "documentTitle": "F1 {{year}} — Grid & Quiz",
+    "footnote": "Grid, teams, car numbers and championship points computed from the <api>OpenF1 API</api> after the {{countryOf}} Grand Prix ({{date}}). Headshots are the official Formula 1 media images. Arvid Lindblad has no published headshot yet, so he shows F1's own silhouette placeholder and is left out of photo questions."
+  },
+
+  "tabs": {
+    "drivers": "Drivers",
+    "standings": "Standings",
+    "quiz": "Quiz"
+  },
+
+  "language": {
+    "label": "Language"
+  },
+
+  "controls": {
+    "searchPlaceholder": "Search driver, team, country or number…",
+    "allTeams": "All teams",
+    "count": "{{visible}} of {{total}} drivers",
+    "empty": "No driver matches “{{query}}”."
+  },
+
+  "sorts": {
+    "standings": "Championship order",
+    "number": "Car number",
+    "name": "Surname (A–Z)",
+    "team": "Team"
+  },
+
+  "card": {
+    "points": "pts"
+  },
+
+  "standings": {
+    "driversTitle": "Drivers' championship",
+    "constructorsTitle": "Constructors' championship",
+    "pos": "Pos",
+    "driver": "Driver",
+    "pts": "Pts",
+    "points": "pts",
+    "wins_one": "{{count}} win",
+    "wins_other": "{{count}} wins"
+  },
+
+  "detail": {
+    "close": "Close",
+    "ordinal_ordinal_one": "{{count}}st",
+    "ordinal_ordinal_two": "{{count}}nd",
+    "ordinal_ordinal_few": "{{count}}rd",
+    "ordinal_ordinal_other": "{{count}}th",
+    "championship": "Championship",
+    "points": "Points",
+    "wins": "Wins",
+    "podiums": "Podiums",
+    "carNumber": "Car number",
+    "teamBase": "Team base",
+    "dob": "Date of birth",
+    "age": "Age",
+    "sprintWins": "Sprint wins ({{year}})",
+    "teamMate": "Team mate"
+  },
+
+  "quiz": {
+    "introTitle": "Test yourself on the {{year}} grid",
+    "introBody": "Twenty-two drivers, eleven teams. Identify them by face, by team, by car number and by flag — answers are graded instantly and you get a full review at the end.",
+    "topicLabel": "Topic",
+    "lengthLabel": "Questions",
+    "fullGrid": "{{count}} — full grid",
+    "start": "Lights out →",
+    "progress": "Question <b>{{current}}</b> of {{total}}",
+    "score": "Score <b>{{score}}</b>",
+    "mysteryDriver": "Mystery driver",
+    "youSaid": "you said {{choice}}",
+
+    "topics": {
+      "mixed": "Mixed",
+      "photo": "Photos",
+      "teams": "Teams",
+      "numbers": "Numbers",
+      "countries": "Nationalities"
+    },
+
+    "prompts": {
+      "photoWho": "Which driver is this?",
+      "photoBlur": "Blurred out — who is it?",
+      "photoTeam": "Which team does this driver race for?",
+      "teamOf": "Which team does {{name}} drive for in {{year}}?",
+      "teamMate": "Who is {{name}}'s team mate at {{team}}?",
+      "driverOfTeam": "Which of these drivers races for {{team}}?",
+      "numberOf": "What car number does {{name}} carry?",
+      "driverOfNumber": "Which driver runs this number?",
+      "countryOf": "Which country does {{name}} represent?",
+      "driverOfCountry": "Which of these drivers is from {{countryOf}}?"
+    },
+
+    "review": {
+      "photoWho": "Identify the driver from their photo",
+      "photoBlur": "Identify the blurred driver",
+      "photoTeam": "Which team does {{name}} race for?",
+      "driverOfNumber": "Which driver runs #{{number}}?"
+    },
+
+    "explain": {
+      "driverTeamNumber": "{{name}} — {{team}}, car #{{number}}.",
+      "thatIs": "That is {{name}}, who races for {{team}}.",
+      "linesUp": "{{name}} lines up for {{team}}, based in {{base}}.",
+      "pairing": "{{name}} and {{mate}} are the {{year}} {{team}} pairing.",
+      "alongside": "{{name}} drives for {{team}} alongside {{mate}}.",
+      "runsNumber": "{{name}} runs #{{number}} for {{team}}.",
+      "numberBelongs": "#{{number}} belongs to {{name}} of {{team}}.",
+      "flagOf": "{{name}} races under the flag of {{countryOf}} {{flag}}.",
+      "entry": "{{name}} {{flag}} is the {{country}} entry on the {{year}} grid."
+    },
+
+    "feedback": {
+      "correct": "Correct.",
+      "wrong": "Not quite."
+    },
+
+    "verdicts": {
+      "winner": {
+        "title": "Race winner 🏆",
+        "blurb": "A perfect lap. You know this grid inside out."
+      },
+      "podium": {
+        "title": "On the podium 🥈",
+        "blurb": "Strong drive — only a couple of places lost."
+      },
+      "points": {
+        "title": "In the points 🏁",
+        "blurb": "Solid midfield run. A few more laps of study to go."
+      },
+      "outside": {
+        "title": "Just outside the points",
+        "blurb": "Not bad, but the front runners are up the road."
+      },
+      "back": {
+        "title": "Back of the grid 🔧",
+        "blurb": "Time in the garage — go browse the drivers list."
+      }
+    },
+
+    "actions": {
+      "playAgain": "Play again — same settings",
+      "changeTopic": "Change topic",
+      "seeResults": "See results →",
+      "nextQuestion": "Next question →"
+    }
+  }
+}
