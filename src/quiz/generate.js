@@ -1,4 +1,5 @@
 import { DRIVERS, TEAMS, SEASON } from '../data/drivers.js'
+import { RACES, RUN_RACES } from '../data/races.js'
 
 const shuffle = (items) => {
   const out = [...items]
@@ -8,8 +9,6 @@ const shuffle = (items) => {
   }
   return out
 }
-
-const pick = (items) => items[Math.floor(Math.random() * items.length)]
 
 /** Pick `count` distinct values from `pool`, keyed by `key`, excluding `taken`. */
 const distractors = (pool, count, key, taken) => {
@@ -28,6 +27,23 @@ const distractors = (pool, count, key, taken) => {
 const withPhoto = DRIVERS.filter((d) => d.hasPhoto)
 
 const year = SEASON.year
+
+const driverById = Object.fromEntries(DRIVERS.map((d) => [d.id, d]))
+
+/** The drivers who have actually won a Grand Prix this season. */
+const raceWinners = [...new Set(RUN_RACES.map((r) => r.winner))].map((id) => driverById[id])
+
+/**
+ * "Who won?" is no test if three of the four names have never won a race, so
+ * draw the wrong answers from the other winners first and only pad from the
+ * wider grid early in a season, when barely anyone has won yet.
+ */
+const winnerDistractors = (champion) => {
+  const picked = distractors(raceWinners, 3, (d) => d.name, [champion.name])
+  if (picked.length === 3) return picked
+  const taken = [champion.name, ...picked.map((d) => d.name)]
+  return [...picked, ...distractors(DRIVERS, 3 - picked.length, (d) => d.name, taken)]
+}
 
 /**
  * Every builder returns a question:
@@ -211,41 +227,229 @@ const BUILDERS = {
   ],
 }
 
-export const TOPIC_IDS = ['mixed', 'photo', 'teams', 'numbers', 'countries']
+/**
+ * The winners topic is the one whose subject is a race rather than a driver —
+ * everything else about a question is the same.
+ */
+/** Everything a winner question says about the race it's asking about. */
+const raceVars = (race, champion) => ({
+  name: champion.name,
+  race: race.name,
+  team: champion.team,
+  round: race.round,
+  circuit: race.circuit,
+  location: race.location,
+  country: race.country,
+  year,
+})
 
-/** A driver pool that is valid for the given topic — photo rounds need a real headshot. */
-const poolFor = (topic) => (topic === 'photo' ? withPhoto : DRIVERS)
-
-const buildOne = (topic, driver) => {
-  const build = pick(BUILDERS[topic])
-  const q = build(driver)
+/** The four driver options for a "who won?" question, with their headshots. */
+const winnerOptions = (champion) => {
+  const others = winnerDistractors(champion)
   return {
-    ...q,
-    topic,
-    options: shuffle([q.correct, ...q.options]),
+    optionKind: 'driver',
+    correct: champion.name,
+    options: others.map((d) => d.name),
+    optionPhotos: Object.fromEntries([champion, ...others].map((d) => [d.name, d.photo])),
+    subject: champion,
   }
 }
 
+BUILDERS.winners = [
+  (race) => {
+    const champion = driverById[race.winner]
+    return {
+      promptKey: 'quiz.prompts.winnerOf',
+      promptVars: raceVars(race, champion),
+      media: { kind: 'map', src: race.map },
+      ...winnerOptions(champion),
+      explainKey: 'quiz.explain.wonRace',
+      explainVars: raceVars(race, champion),
+    }
+  },
+
+  // The map is the whole question here — the Grand Prix is deliberately unnamed,
+  // so the review screen names it instead.
+  (race) => {
+    const champion = driverById[race.winner]
+    return {
+      promptKey: 'quiz.prompts.winnerAtCircuit',
+      promptVars: raceVars(race, champion),
+      reviewKey: 'quiz.prompts.winnerOf',
+      media: { kind: 'map', src: race.map },
+      ...winnerOptions(champion),
+      explainKey: 'quiz.explain.wonRace',
+      explainVars: raceVars(race, champion),
+    }
+  },
+
+  (race) => {
+    const champion = driverById[race.winner]
+    return {
+      promptKey: 'quiz.prompts.winnerAtNamedCircuit',
+      promptVars: raceVars(race, champion),
+      reviewKey: 'quiz.prompts.winnerOf',
+      ...winnerOptions(champion),
+      explainKey: 'quiz.explain.wonRace',
+      explainVars: raceVars(race, champion),
+    }
+  },
+
+  (race) => {
+    const champion = driverById[race.winner]
+    // Every wrong answer must be a race somebody else won, or the question has
+    // two right answers. Skip it when the winner has swept too much of the season.
+    const others = distractors(
+      RUN_RACES.filter((r) => r.winner !== race.winner),
+      3,
+      (r) => r.name,
+      [race.name],
+    )
+    if (others.length < 3) return null
+    return {
+      promptKey: 'quiz.prompts.raceWonBy',
+      promptVars: raceVars(race, champion),
+      media: { kind: 'photo', src: champion.photo },
+      optionKind: 'race',
+      correct: race.name,
+      options: others.map((r) => r.name),
+      subject: champion,
+      explainKey: 'quiz.explain.wonRace',
+      explainVars: raceVars(race, champion),
+    }
+  },
+]
+
+/** Circuits are asked about whether or not the race has been run yet. */
+const mappedRaces = RACES.filter((r) => r.map)
+
 /**
- * Build a quiz of `count` questions. Drivers are drawn without repeats until the
- * grid is exhausted, so a short quiz never asks about the same driver twice.
+ * Shared tail of a circuit question. `explainMedia` is what the feedback row
+ * shows once the answer is in — a driver question has a headshot to fall back
+ * on, a circuit question doesn't, so it names the layout explicitly.
+ */
+const circuitCommon = (race) => ({
+  subject: race,
+  explainMedia: { kind: 'map', src: race.map },
+  explainKey: 'quiz.explain.circuit',
+  explainVars: {
+    circuit: race.circuit,
+    location: race.location,
+    race: race.name,
+    country: race.country,
+  },
+})
+
+const circuitVars = (race) => ({
+  race: race.name,
+  circuit: race.circuit,
+  location: race.location,
+})
+
+BUILDERS.circuits = [
+  (race) => ({
+    promptKey: 'quiz.prompts.whichCircuit',
+    promptVars: circuitVars(race),
+    reviewKey: 'quiz.review.whichCircuit',
+    media: { kind: 'map', src: race.map },
+    optionKind: 'circuit',
+    correct: race.circuit,
+    options: distractors(mappedRaces, 3, (r) => r.circuit, [race.circuit]).map((r) => r.circuit),
+    ...circuitCommon(race),
+  }),
+
+  (race) => ({
+    promptKey: 'quiz.prompts.whichRaceCircuit',
+    promptVars: circuitVars(race),
+    reviewKey: 'quiz.review.whichRaceCircuit',
+    media: { kind: 'map', src: race.map },
+    optionKind: 'race',
+    correct: race.name,
+    options: distractors(mappedRaces, 3, (r) => r.name, [race.name]).map((r) => r.name),
+    ...circuitCommon(race),
+  }),
+
+  (race) => ({
+    promptKey: 'quiz.prompts.whereIsCircuit',
+    promptVars: circuitVars(race),
+    reviewKey: 'quiz.review.whereIsCircuit',
+    media: { kind: 'map', src: race.map },
+    optionKind: 'location',
+    correct: race.location,
+    options: distractors(mappedRaces, 3, (r) => r.location, [race.location]).map((r) => r.location),
+    ...circuitCommon(race),
+  }),
+
+  // No map above the prompt — this one goes the other way, from the named Grand
+  // Prix to its circuit, and only reveals the layout in the feedback.
+  (race) => ({
+    promptKey: 'quiz.prompts.circuitOfRace',
+    promptVars: circuitVars(race),
+    optionKind: 'circuit',
+    correct: race.circuit,
+    options: distractors(mappedRaces, 3, (r) => r.circuit, [race.circuit]).map((r) => r.circuit),
+    ...circuitCommon(race),
+  }),
+]
+
+export const TOPIC_IDS = ['mixed', 'photo', 'teams', 'numbers', 'countries', 'winners', 'circuits']
+
+/**
+ * The subjects a topic draws its questions from. Photo rounds need a real
+ * headshot; winner rounds are about races rather than drivers, and two of their
+ * three builders show the circuit map, so a race without one is left out.
+ */
+const poolFor = (topic) =>
+  topic === 'photo'
+    ? withPhoto
+    : topic === 'winners'
+      ? RUN_RACES.filter((r) => r.map)
+      : topic === 'circuits'
+        ? mappedRaces
+        : DRIVERS
+
+/** Which pool a topic draws from — driver topics deliberately share one. */
+const kindOf = (topic) => (topic === 'winners' || topic === 'circuits' ? topic : 'drivers')
+
+const reseed = { drivers: () => DRIVERS, winners: () => poolFor('winners'), circuits: () => mappedRaces }
+
+/** Builders may return null when a subject can't make a fair question of them. */
+const buildOne = (topic, subject) => {
+  for (const build of shuffle(BUILDERS[topic])) {
+    const q = build(subject)
+    if (q) return { ...q, topic, options: shuffle([q.correct, ...q.options]) }
+  }
+  return null
+}
+
+const MIXED_TOPICS = ['photo', 'teams', 'numbers', 'countries', 'winners', 'circuits']
+
+/**
+ * Build a quiz of `count` questions. Subjects are drawn without repeats until
+ * the pool is exhausted, so a short quiz never asks about the same driver — or
+ * the same race — twice. Drivers share one pool across topics so a mixed quiz
+ * doesn't circle back to the same driver; races keep their own.
  */
 export const buildQuiz = (topic, count) => {
-  const topics = topic === 'mixed' ? ['photo', 'teams', 'numbers', 'countries'] : [topic]
+  const topics = topic === 'mixed' ? MIXED_TOPICS : [topic]
   const questions = []
-  let pool = []
+  const pools = { drivers: [], winners: [], circuits: [] }
 
   for (let i = 0; i < count; i++) {
     const chosenTopic = topic === 'mixed' ? topics[i % topics.length] : topic
+    const kind = kindOf(chosenTopic)
     const valid = poolFor(chosenTopic)
-    let candidates = pool.filter((d) => valid.includes(d))
+
+    let candidates = pools[kind].filter((s) => valid.includes(s))
     if (candidates.length === 0) {
-      pool = shuffle(DRIVERS)
-      candidates = pool.filter((d) => valid.includes(d))
+      pools[kind] = shuffle(reseed[kind]())
+      candidates = pools[kind].filter((s) => valid.includes(s))
     }
-    const driver = candidates[0]
-    pool = pool.filter((d) => d.id !== driver.id)
-    questions.push(buildOne(chosenTopic, driver))
+
+    const subject = candidates[0]
+    pools[kind] = pools[kind].filter((s) => s !== subject)
+    const question = buildOne(chosenTopic, subject)
+    if (question) questions.push(question)
   }
 
   return shuffle(questions)

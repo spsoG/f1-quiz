@@ -8,35 +8,29 @@
     "documentTitle": "Ф1 {{year}} — решітка та вікторина",
     "footnote": "Склад решітки, команди, номери болідів та очки чемпіонату розраховано за даними <api>OpenF1 API</api> після Гран-прі {{countryOf}} ({{date}}). Портрети — офіційні медіазображення Formula 1. Арвід Ліндблад ще не має опублікованого портрета, тож для нього показано силует-заглушку від F1, і його виключено з питань із фото."
   },
-
   "tabs": {
     "drivers": "Пілоти",
     "standings": "Залік",
     "quiz": "Вікторина"
   },
-
   "language": {
     "label": "Мова"
   },
-
   "controls": {
     "searchPlaceholder": "Пошук пілота, команди, країни або номера…",
     "allTeams": "Усі команди",
     "count": "{{visible}} з {{total}} пілотів",
     "empty": "Жоден пілот не відповідає запиту «{{query}}»."
   },
-
   "sorts": {
     "standings": "За місцем у чемпіонаті",
     "number": "За номером боліда",
     "name": "За прізвищем (A–Z)",
     "team": "За командою"
   },
-
   "card": {
     "points": "оч."
   },
-
   "standings": {
     "driversTitle": "Особистий залік",
     "constructorsTitle": "Кубок конструкторів",
@@ -49,7 +43,6 @@
     "wins_many": "{{count}} перемог",
     "wins_other": "{{count}} перемог"
   },
-
   "detail": {
     "close": "Закрити",
     "ordinal_ordinal_few": "{{count}}-й",
@@ -65,7 +58,6 @@
     "sprintWins": "Перемоги у спринтах ({{year}})",
     "teamMate": "Напарник"
   },
-
   "quiz": {
     "introTitle": "Перевірте себе на решітці {{year}} року",
     "introBody": "Двадцять два пілоти, одинадцять команд. Впізнавайте їх за обличчям, командою, номером боліда та прапором — відповіді оцінюються миттєво, а наприкінці на вас чекає повний розбір.",
@@ -78,16 +70,17 @@
     "mysteryDriver": "Загадковий пілот",
     "teamLogo": "Логотип {{team}}",
     "countryFlag": "Прапор {{countryOf}}",
+    "circuitMap": "Схема траси",
     "youSaid": "ваша відповідь — {{choice}}",
-
     "topics": {
       "mixed": "Змішано",
       "photo": "Фото",
       "teams": "Команди",
       "numbers": "Номери",
-      "countries": "Національності"
+      "countries": "Національності",
+      "winners": "Переможці гонок",
+      "circuits": "Траси"
     },
-
     "prompts": {
       "photoWho": "Хто цей пілот?",
       "photoBlur": "Розмито — хто це?",
@@ -98,16 +91,25 @@
       "numberOf": "Під яким номером виступає {{name}}?",
       "driverOfNumber": "Який пілот виступає під цим номером?",
       "countryOf": "Яку країну представляє {{name}}?",
-      "driverOfCountry": "Хто з цих пілотів родом з {{countryOf}}?"
+      "driverOfCountry": "Хто з цих пілотів родом з {{countryOf}}?",
+      "winnerOf": "Хто виграв {{race}} на трасі {{circuit}} ({{location}})?",
+      "winnerAtCircuit": "Хто виграв гонку на цій трасі?",
+      "raceWonBy": "Який із цих Гран-прі виграв {{name}}?",
+      "winnerAtNamedCircuit": "Хто виграв гонку {{year}} року на трасі {{circuit}} ({{location}})?",
+      "whichCircuit": "Що це за траса?",
+      "whichRaceCircuit": "Який Гран-прі приймає ця траса?",
+      "whereIsCircuit": "Де розташована ця траса?",
+      "circuitOfRace": "На якій трасі проходить {{race}}?"
     },
-
     "review": {
       "photoWho": "Впізнайте пілота за фото",
       "photoBlur": "Впізнайте розмитого пілота",
       "photoTeam": "За яку команду виступає {{name}}?",
-      "driverOfNumber": "Який пілот виступає під номером {{number}}?"
+      "driverOfNumber": "Який пілот виступає під номером {{number}}?",
+      "whichCircuit": "Впізнайте трасу за її схемою",
+      "whichRaceCircuit": "Який Гран-прі приймає траса {{circuit}}?",
+      "whereIsCircuit": "Де розташована траса {{circuit}}?"
     },
-
     "explain": {
       "driverTeamNumber": "{{name}} — {{team}}, номер {{number}}.",
       "thatIs": "Це {{name}} — виступає за {{team}}.",
@@ -117,14 +119,14 @@
       "runsNumber": "{{name}} виступає під номером {{number}} за {{team}}.",
       "numberBelongs": "Номер {{number}} належить {{name}} з команди {{team}}.",
       "flagOf": "{{name}} виступає під прапором {{countryOf}} {{flag}}.",
-      "entry": "{{name}} {{flag}} — представник {{countryOf}} на решітці {{year}} року."
+      "entry": "{{name}} {{flag}} — представник {{countryOf}} на решітці {{year}} року.",
+      "wonRace": "{{name}} виграв {{race}} на трасі {{circuit}} ({{location}}, {{country}}) — {{round}}-й етап, команда {{team}}.",
+      "circuit": "{{circuit}} — {{location}}, {{country}}. Тут проходить {{race}}."
     },
-
     "feedback": {
       "correct": "Правильно.",
       "wrong": "Не зовсім."
     },
-
     "verdicts": {
       "winner": {
         "title": "Переможець гонки 🏆",
@@ -147,7 +149,6 @@
         "blurb": "Час у боксах — перегляньте список пілотів."
       }
     },
-
     "actions": {
       "playAgain": "Ще раз — ті самі налаштування",
       "changeTopic": "Змінити тему",
@@ -155,47 +156,87 @@
       "nextQuestion": "Наступне питання →"
     }
   },
-
   "countries": {
     "Argentina": "Аргентина",
     "Australia": "Австралія",
+    "Austria": "Австрія",
+    "Azerbaijan": "Азербайджан",
+    "Bahrain": "Бахрейн",
+    "Belgium": "Бельгія",
     "Brazil": "Бразилія",
     "Canada": "Канада",
+    "China": "Китай",
     "Finland": "Фінляндія",
     "France": "Франція",
     "Germany": "Німеччина",
     "Hungary": "Угорщина",
     "Italy": "Італія",
+    "Japan": "Японія",
     "Mexico": "Мексика",
     "Monaco": "Монако",
     "Netherlands": "Нідерланди",
     "New Zealand": "Нова Зеландія",
+    "Qatar": "Катар",
+    "Singapore": "Сінгапур",
     "Spain": "Іспанія",
     "Thailand": "Таїланд",
+    "United Arab Emirates": "Об’єднані Арабські Емірати",
     "United Kingdom": "Велика Британія",
     "United States": "США"
   },
-
   "countriesOf": {
     "Argentina": "Аргентини",
     "Australia": "Австралії",
+    "Austria": "Австрії",
+    "Azerbaijan": "Азербайджану",
+    "Bahrain": "Бахрейну",
+    "Belgium": "Бельгії",
     "Brazil": "Бразилії",
     "Canada": "Канади",
+    "China": "Китаю",
     "Finland": "Фінляндії",
     "France": "Франції",
     "Germany": "Німеччини",
     "Hungary": "Угорщини",
     "Italy": "Італії",
+    "Japan": "Японії",
     "Mexico": "Мексики",
     "Monaco": "Монако",
     "Netherlands": "Нідерландів",
     "New Zealand": "Нової Зеландії",
+    "Qatar": "Катару",
+    "Singapore": "Сінгапуру",
     "Spain": "Іспанії",
     "Thailand": "Таїланду",
+    "United Arab Emirates": "Об’єднаних Арабських Еміратів",
     "United Kingdom": "Великої Британії",
     "United States": "США"
   },
-
+  "races": {
+    "Abu Dhabi Grand Prix": "Гран-прі Абу-Дабі",
+    "Australian Grand Prix": "Гран-прі Австралії",
+    "Austrian Grand Prix": "Гран-прі Австрії",
+    "Azerbaijan Grand Prix": "Гран-прі Азербайджану",
+    "Bahrain Grand Prix": "Гран-прі Бахрейну",
+    "Barcelona Grand Prix": "Гран-прі Барселони",
+    "Belgian Grand Prix": "Гран-прі Бельгії",
+    "British Grand Prix": "Гран-прі Великої Британії",
+    "Canadian Grand Prix": "Гран-прі Канади",
+    "Chinese Grand Prix": "Гран-прі Китаю",
+    "Dutch Grand Prix": "Гран-прі Нідерландів",
+    "Hungarian Grand Prix": "Гран-прі Угорщини",
+    "Italian Grand Prix": "Гран-прі Італії",
+    "Japanese Grand Prix": "Гран-прі Японії",
+    "Las Vegas Grand Prix": "Гран-прі Лас-Вегаса",
+    "Mexico City Grand Prix": "Гран-прі Мехіко",
+    "Miami Grand Prix": "Гран-прі Маямі",
+    "Monaco Grand Prix": "Гран-прі Монако",
+    "Qatar Grand Prix": "Гран-прі Катару",
+    "Singapore Grand Prix": "Гран-прі Сінгапуру",
+    "São Paulo Grand Prix": "Гран-прі Сан-Паулу",
+    "Spanish Grand Prix": "Гран-прі Іспанії",
+    "United States Grand Prix": "Гран-прі США"
+  },
   "bases": {
     "Brackley, United Kingdom": "Бреклі, Велика Британія",
     "Enstone, United Kingdom": "Енстоун, Велика Британія",
@@ -208,7 +249,6 @@
     "Silverstone, United Kingdom": "Сільверстоун, Велика Британія",
     "Woking, United Kingdom": "Вокінг, Велика Британія"
   },
-
   "bios": {
     "alb": "Опора Williams, відомий умінням витягувати складні боліди в очкову зону.",
     "alo": "Дворазовий чемпіон світу й найдосвідченіший пілот в історії Ф1.",
@@ -232,5 +272,55 @@
     "sai": "Переможець гонок за Ferrari, тепер очолює відродження Williams.",
     "str": "Двічі фінішував на подіумі; десять років є незмінною частиною Aston Martin.",
     "ver": "Чотириразовий чемпіон світу, який зберіг свій дитячий номер 3 замість першого."
+  },
+  "circuits": {
+    "Albert Park": "Альберт-Парк",
+    "Autódromo Hermanos Rodríguez": "Автодром братів Родрігес",
+    "Bahrain International Circuit": "Міжнародний автодром Бахрейну",
+    "Baku City Circuit": "Міська траса Баку",
+    "Circuit Gilles Villeneuve": "Траса імені Жиля Вільнева",
+    "Circuit de Barcelona-Catalunya": "Барселона-Каталунья",
+    "Circuit de Monaco": "Траса Монако",
+    "Circuit of the Americas": "Траса Америк",
+    "Hungaroring": "Хунгароринг",
+    "Interlagos": "Інтерлагос",
+    "Las Vegas Strip Circuit": "Траса Лас-Вегас-Стрип",
+    "Lusail International Circuit": "Міжнародний автодром Лусаїл",
+    "Madring": "Мадринг",
+    "Marina Bay Street Circuit": "Міська траса Марина-Бей",
+    "Miami International Autodrome": "Міжнародний автодром Маямі",
+    "Monza": "Монца",
+    "Red Bull Ring": "Ред Булл Ринг",
+    "Shanghai International Circuit": "Шанхайський міжнародний автодром",
+    "Silverstone": "Сільверстоун",
+    "Spa-Francorchamps": "Спа-Франкоршам",
+    "Suzuka": "Судзука",
+    "Yas Marina": "Яс-Маріна",
+    "Zandvoort": "Зандворт"
+  },
+  "locations": {
+    "Austin": "Остін",
+    "Baku": "Баку",
+    "Barcelona": "Барселона",
+    "Budapest": "Будапешт",
+    "Las Vegas": "Лас-Вегас",
+    "Lusail": "Лусаїл",
+    "Madrid": "Мадрид",
+    "Marina Bay": "Марина-Бей",
+    "Melbourne": "Мельбурн",
+    "Mexico City": "Мехіко",
+    "Miami Gardens": "Маямі-Гарденс",
+    "Monte Carlo": "Монте-Карло",
+    "Montréal": "Монреаль",
+    "Monza": "Монца",
+    "Sakhir": "Сахір",
+    "Shanghai": "Шанхай",
+    "Silverstone": "Сільверстоун",
+    "Spielberg": "Шпільберг",
+    "Stavelot": "Ставло",
+    "Suzuka": "Судзука",
+    "São Paulo": "Сан-Паулу",
+    "Yas Island": "Яс-Айленд",
+    "Zandvoort": "Зандворт"
   }
 }

@@ -18,11 +18,27 @@ export const tBase = (t, base) => t(`bases.${base}`, { defaultValue: base })
 /** Driver biography, keyed by driver id. */
 export const tBio = (t, driver) => t(`bios.${driver.id}`, { defaultValue: driver.bio })
 
+/** Grand Prix name — "Hungarian Grand Prix" → "Гран-прі Угорщини". */
+export const tRace = (t, name) => t(`races.${name}`, { defaultValue: name })
+
+/** Circuit name — "Hungaroring" → "Хунгароринг". */
+export const tCircuit = (t, name) => t(`circuits.${name}`, { defaultValue: name })
+
+/** Host city — "Budapest" → "Будапешт". */
+export const tLocation = (t, name) => t(`locations.${name}`, { defaultValue: name })
+
 /**
  * Quiz answer options hold canonical English data values so grading stays a
  * plain string comparison; only the rendering is localised.
  */
-export const tOption = (t, value, kind) => (kind === 'country' ? tCountry(t, value) : value)
+const OPTION_TRANSLATORS = {
+  country: tCountry,
+  race: tRace,
+  circuit: tCircuit,
+  location: tLocation,
+}
+
+export const tOption = (t, value, kind) => OPTION_TRANSLATORS[kind]?.(t, value) ?? value
 
 /**
  * Interpolation variables on a question hold canonical English data values too.
@@ -36,5 +52,8 @@ export const resolveVars = (t, vars = {}) => {
     out.countryOf = tCountryOf(t, vars.country)
   }
   if (vars.base) out.base = tBase(t, vars.base)
+  if (vars.race) out.race = tRace(t, vars.race)
+  if (vars.circuit) out.circuit = tCircuit(t, vars.circuit)
+  if (vars.location) out.location = tLocation(t, vars.location)
   return out
 }

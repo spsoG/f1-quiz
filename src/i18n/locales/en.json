@@ -76,6 +76,7 @@
     "mysteryDriver": "Mystery driver",
     "teamLogo": "{{team}} logo",
     "countryFlag": "Flag of {{country}}",
+    "circuitMap": "Circuit layout",
     "youSaid": "you said {{choice}}",
 
     "topics": {
@@ -83,7 +84,9 @@
       "photo": "Photos",
       "teams": "Teams",
       "numbers": "Numbers",
-      "countries": "Nationalities"
+      "countries": "Nationalities",
+      "winners": "Race winners",
+      "circuits": "Circuits"
     },
 
     "prompts": {
@@ -96,14 +99,25 @@
       "numberOf": "What car number does {{name}} carry?",
       "driverOfNumber": "Which driver runs this number?",
       "countryOf": "Which country does {{name}} represent?",
-      "driverOfCountry": "Which of these drivers is from {{countryOf}}?"
+      "driverOfCountry": "Which of these drivers is from {{countryOf}}?",
+      "winnerOf": "Who won the {{race}} at {{circuit}}, {{location}}?",
+      "winnerAtCircuit": "Who won the race at this circuit?",
+      "winnerAtNamedCircuit": "Who won the {{year}} race at {{circuit}} in {{location}}?",
+      "raceWonBy": "Which of these Grands Prix did {{name}} win?",
+      "whichCircuit": "Which circuit is this?",
+      "whichRaceCircuit": "Which Grand Prix is held on this circuit?",
+      "whereIsCircuit": "Where is this circuit?",
+      "circuitOfRace": "Which circuit hosts the {{race}}?"
     },
 
     "review": {
       "photoWho": "Identify the driver from their photo",
       "photoBlur": "Identify the blurred driver",
       "photoTeam": "Which team does {{name}} race for?",
-      "driverOfNumber": "Which driver runs #{{number}}?"
+      "driverOfNumber": "Which driver runs #{{number}}?",
+      "whichCircuit": "Name the circuit from its layout",
+      "whichRaceCircuit": "Which Grand Prix is held at {{circuit}}?",
+      "whereIsCircuit": "Where is {{circuit}}?"
     },
 
     "explain": {
@@ -115,7 +129,9 @@
       "runsNumber": "{{name}} runs #{{number}} for {{team}}.",
       "numberBelongs": "#{{number}} belongs to {{name}} of {{team}}.",
       "flagOf": "{{name}} races under the flag of {{countryOf}} {{flag}}.",
-      "entry": "{{name}} {{flag}} is the {{country}} entry on the {{year}} grid."
+      "entry": "{{name}} {{flag}} is the {{country}} entry on the {{year}} grid.",
+      "wonRace": "{{name}} won the {{race}} at {{circuit}} in {{location}}, {{country}} — round {{round}} for {{team}}.",
+      "circuit": "{{circuit}} in {{location}}, {{country}} — home of the {{race}}."
     },
 
     "feedback": {

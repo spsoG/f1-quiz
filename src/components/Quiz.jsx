@@ -20,6 +20,11 @@ function Media({ media }) {
   if (media.kind === 'number') {
     return <div className="q-number">{media.value}</div>
   }
+  if (media.kind === 'map') {
+    // Deliberately unnamed — one of the winner questions is asking you to
+    // recognise the circuit, and an alt text would hand that over.
+    return <img className="q-map" src={media.src} alt={t('quiz.circuitMap')} />
+  }
   if (media.kind === 'flag') {
     return (
       <div className="q-flag" role="img" aria-label={t('quiz.countryFlag', resolveVars(t, media))}>
@@ -261,7 +266,11 @@ export default function Quiz() {
         {answered && (
           <>
             <div className="feedback">
-              <img src={q.subject.photo} alt="" />
+              {q.explainMedia ? (
+                <img className="feedback-map" src={q.explainMedia.src} alt="" />
+              ) : (
+                <img src={q.subject.photo} alt="" />
+              )}
               <span>
                 <b>{choice === q.correct ? t('quiz.feedback.correct') : t('quiz.feedback.wrong')}</b>{' '}
                 {t(q.explainKey, resolveVars(t, q.explainVars))}
