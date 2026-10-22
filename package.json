@@ -1,13 +1,22 @@
 {
   "name": "f1-quiz",
-  "private": true,
   "version": "0.0.0",
+  "description": "A React quiz and grid browser for the Formula 1 season",
   "type": "module",
+  "license": "MIT",
+  "author": "Serhii Pryvala",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/your-username/f1-quiz.git"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "lint": "oxlint",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "setup": "npm install && npm run fetch-assets",
+    "fetch-assets": "node scripts/fetch-assets.mjs",
+    "refresh-data": "node scripts/refresh-data.mjs"
   },
   "dependencies": {
     "i18next": "^26.3.6",

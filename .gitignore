@@ -22,3 +22,13 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Agent / editor tooling
+.claude/
+
+# Formula 1 media (driver headshots, team logos, circuit maps) is third-party
+# artwork and is not redistributed in this repository. `npm run fetch-assets`
+# downloads it on demand — see README.md.
+public/drivers/
+public/teams/
+public/circuits/
